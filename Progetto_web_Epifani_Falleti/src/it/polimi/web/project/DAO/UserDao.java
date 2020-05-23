@@ -21,7 +21,7 @@ public class UserDao {
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setString(1, username);
 			pstatement.setString(2, password);
-			// eseguo la query
+
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
 					return null;
