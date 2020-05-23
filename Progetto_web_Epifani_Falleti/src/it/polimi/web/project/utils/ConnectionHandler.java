@@ -14,14 +14,20 @@ public class ConnectionHandler {
 		try {
 
 			String driver = context.getInitParameter("dbDriver");
+			System.out.println(driver);
 			String url = context.getInitParameter("dbUrl");
+			System.out.println(url);
 			String user = context.getInitParameter("dbUser");
+			System.out.println(user);
 			String password = context.getInitParameter("dbPassword");
+			System.out.println(password);
 			Class.forName(driver);
+
 			connection = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException e) {
 			throw new UnavailableException("Can't load database driver");
 		} catch (SQLException e) {
+
 			throw new UnavailableException("Couldn't get db connection");
 		}
 		return connection;
@@ -32,5 +38,5 @@ public class ConnectionHandler {
 			connection.close();
 		}
 	}
-	
+
 }

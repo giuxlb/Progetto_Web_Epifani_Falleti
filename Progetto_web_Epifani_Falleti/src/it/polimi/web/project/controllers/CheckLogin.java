@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,10 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-
+import it.polimi.web.project.DAO.UserDao;
 import it.polimi.web.project.beans.User;
 import it.polimi.web.project.utils.ConnectionHandler;
-import it.polimi.web.project.DAO.UserDao;
 
 @WebServlet("/CheckLogin")
 public class CheckLogin extends HttpServlet {
