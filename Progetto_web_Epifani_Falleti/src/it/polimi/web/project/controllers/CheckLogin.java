@@ -56,17 +56,16 @@ public class CheckLogin extends HttpServlet {
 			return;
 		}
 
-		// If the user exists, add info to the session and go to home page, otherwise
-		// show login page with error message
-
 		String path;
 		if (user == null) {
 			response.setContentType("text/plain");
 			out.println("Non sei registrato");
 		} else {
 			request.getSession().setAttribute("user", user);
-			path = getServletContext().getContextPath() + "/HOME.html";
+			path = getServletContext().getContextPath() + "/Home.html";
+			System.out.println(path);
 			response.sendRedirect(path);
+
 		}
 
 	}
