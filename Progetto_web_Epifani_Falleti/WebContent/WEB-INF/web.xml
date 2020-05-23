@@ -4,22 +4,28 @@
   
 <context-param>
 <param-name>dbUrl</param-name> 
-<param-value>jdbc:mysql://localhost:3306/esercizio4</param-value>
+<param-value>jdbc:mysql://localhost:3306/esercizio4?useLegacyDatetimeCode=false&amp;serverTimezone=UTC</param-value>
 </context-param> 
+
 <context-param>
 <param-name>dbUser</param-name>
 <param-value>root</param-value> 
 </context-param>
+
 <context-param>
 <param-name>dbPassword</param-name> 
-<param-value>y2Cmg4QSje</param-value>
+<param-value>stayhungry</param-value>
 </context-param> 
+
 <context-param>
 <param-name>dbDriver</param-name>
 <param-value>com.mysql.cj.jdbc.Driver</param-value> 
 </context-param>
 
+
   <welcome-file-list>
-    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.html</welcome-file>
+     <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 </web-app>

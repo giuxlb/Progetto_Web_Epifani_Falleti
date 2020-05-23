@@ -51,6 +51,7 @@ public class CheckLogin extends HttpServlet {
 		try {
 			user = userDao.checkCredentials(usrn, pwd);
 		} catch (SQLException e) {
+			e.printStackTrace(System.out);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not Possible to check credentials");
 			return;
 		}
@@ -64,7 +65,7 @@ public class CheckLogin extends HttpServlet {
 			out.println("Non sei registrato");
 		} else {
 			request.getSession().setAttribute("user", user);
-			path = getServletContext().getContextPath() + "/Home";
+			path = getServletContext().getContextPath() + "/HOME.html";
 			response.sendRedirect(path);
 		}
 
