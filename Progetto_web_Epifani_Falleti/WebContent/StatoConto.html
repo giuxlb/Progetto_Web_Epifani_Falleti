@@ -8,7 +8,7 @@
 	<div align="right">
 		<a th:href="@{/GoToHomePage}">Back to Home Page</a>
 	</div>
-	<h1> This is your bank account(ID <span th:text = "${contoID}"></span> ) Balance is  <span th:text = "${saldo}"></span> $</h1>
+	<h1 th:text="${'This is you bank account (ID: ' + session.ContoID + ')'+ 'Balance: ' + session.Saldo + '$'}"></h1>
 	<table>
 		<thead>
 			<tr>
@@ -34,20 +34,22 @@
 	<form action="#" th:action="@{/CreateTrasferimento}" method="POST">
 	<fieldset>
 				<p>
-					UserID of addressee: <input type="text" name="destUserID" required />
+					UserID of addressee: <input type="number" name="destUserID" required />
 				</p>
 				<p>
-					Bank account ID of addressee: <input type="text" name="destContoID" required />
+					Bank account ID of addressee: <input type="number" name="destContoID" required />
 				</p>
 				<p>
 					Purpose: <input type="text" name="causale" required />
 				</p>
 				<p>
-					Amount: <input type="text" name="importo" required />
+					Amount: <input type="number" name="importo" required />
 				</p>
 				
 				<input type="submit" name="Make Trasferimento">
 			</fieldset>
+			<p th:text=" ${errorMsg}"></p>
+			
 	</form>
 	</div>
 </body>

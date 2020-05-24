@@ -74,6 +74,8 @@ public class GetConto extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
 			return;
 		}
+		session.setAttribute("ContoID", contoID);
+		session.setAttribute("Saldo", saldo);
 
 		TrasferimentoDao tDao = new TrasferimentoDao(connection);
 

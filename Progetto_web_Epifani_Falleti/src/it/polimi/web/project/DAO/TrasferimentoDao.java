@@ -18,33 +18,38 @@ public class TrasferimentoDao {
 		this.con = c;
 	}
 
-	public boolean createTrasferimento(int destUserID, int destContoID, int userID, int contoID, int importo,
+	public int createTrasferimento(int destUserID, int destContoID, int userID, int contoID, int importo,
 			String causale) throws SQLException {
 		ContoDao cdao = new ContoDao(con);
 
 		List<Conto> conti = cdao.findContoByUser(destUserID);
 
-		boolean verified = false;
+		boolean verified1 = false;
+		boolean verified2 = false;
+		
 
 		for (int i = 0; i < conti.size(); i++) {
 			if (conti.get(i).getID() == destContoID) // abbiamo trovato il conto
 			{
-				if (conti.get(i).getSaldo() > importo)
-					verified = true;
+				verified1 = true;
 				break;
 			}
 		} // qui ho controllato se il conto sotto quel contoID è effettivamente dello user
 			// id e se il saldo di quel conto, permette un trasferimento di quell'importo
 
+		if (!verified1) return 0;
+		
+		Conto conto = cdao.findContoByContoID(contoID);
+		if (conto.getSaldo() < importo) return 1;
+		
 		// se verified è ancora false, ritorniamo false
-		if (!verified)
-			return verified;
+
 		int importoDest = 0 - importo;
 		// qui verified sarà true, quindi possiamo modificare sia l'importo del conto di
 		// destinazione, sia quello di quello di origine origine e aggiungere il
 		// trasferimento al dbms
-		cdao.changeSaldo(importoDest, destContoID);
-		cdao.changeSaldo(importo, contoID);
+		cdao.changeSaldo(importo, destContoID);
+		cdao.changeSaldo(importoDest, contoID);
 
 		java.util.Date d = new java.util.Date();
 
@@ -60,7 +65,7 @@ public class TrasferimentoDao {
 		}
 
 		// TO-DO ricordare a peppe l'aggiunta del parametro session.contoID
-		return true;
+		return 2;
 	}
 
 	public List<Trasferimento> findTrasferimentibyConto(int contoID) throws SQLException {

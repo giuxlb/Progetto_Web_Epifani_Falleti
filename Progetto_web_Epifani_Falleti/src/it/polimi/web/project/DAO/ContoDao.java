@@ -64,4 +64,23 @@ public class ContoDao {
 		}
 
 	}
+	
+	public Conto findContoByContoID(int contoID) throws SQLException{
+		String query = "SELECT * FROM esercizio4.conto where contoID = ?";
+		Conto conto = new Conto();
+		try (PreparedStatement pstatement = con.prepareStatement(query)) {
+			pstatement.setInt(1, contoID);
+			try (ResultSet result = pstatement.executeQuery()) {
+				if (!result.isBeforeFirst())
+					return null;
+				else {
+					result.next();
+					conto.setID(result.getInt("contoID"));
+					conto.setSaldo(result.getInt("saldo"));
+					conto.setUserID(result.getInt("userID"));
+				}
+			}
+		}
+		return conto;
+	}
 }
