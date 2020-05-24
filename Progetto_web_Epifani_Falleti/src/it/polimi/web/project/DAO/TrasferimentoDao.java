@@ -2,10 +2,13 @@ package it.polimi.web.project.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.web.project.beans.Conto;
+import it.polimi.web.project.beans.Trasferimento;
 
 public class TrasferimentoDao {
 
@@ -58,6 +61,30 @@ public class TrasferimentoDao {
 
 		// TO-DO ricordare a peppe l'aggiunta del parametro session.contoID
 		return true;
+	}
+
+	public List<Trasferimento> findTrasferimentibyConto(int contoID) throws SQLException {
+		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
+		String query = "SELECT * FROM esercizio4.trasferimento where contoID = ?";
+		try (PreparedStatement pstatement = con.prepareStatement(query)) {
+			pstatement.setInt(1, contoID);
+			try (ResultSet result = pstatement.executeQuery()) {
+				if (!result.isBeforeFirst())
+					return null;
+				else {
+					while (result.next()) {
+						Trasferimento t = new Trasferimento();
+						t.setCausale(result.getString("causale"));
+						t.setContoID(contoID);
+						t.setData(result.getDate("data"));
+						t.setImporto(result.getInt("importo"));
+						t.setDestContoId(result.getInt("DestContoID"));
+						trasferimenti.add(t);
+					}
+				}
+			}
+		}
+		return trasferimenti;
 	}
 
 }
