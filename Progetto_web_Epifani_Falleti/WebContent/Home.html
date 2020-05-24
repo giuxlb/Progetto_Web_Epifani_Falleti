@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html  xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
 </head>
 <body>
-<p>Benvenuto</p>
+	<div align="right">
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<h1>Welcome to the Home Page</h1>
+	<p th:text = "${'Welcome '+ session.user.name+ ' '+ session.user.surname + '. Your userID is ' + session.user.id}"> </p>
+	
+	<table>
+	<thead>
+			<tr>
+				<th>Bank Account ID</th>
+				<th>Saldo</th>
+				<th>Link</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="c : ${conti}">
+				<td th:text="${c.id}"></td>
+				<td th:text="${ c.saldo}"></td>
+				<td><a th:href="@{/GetConto(contoid=${c.id},saldo = ${c.saldo})}">Bank Account Status</a></td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

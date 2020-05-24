@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div align="right">
+		<a th:href="@{/GoToHomePage}">Back to Home Page</a>
+	</div>
+	<h1> This is your bank account(ID <span th:text = "${contoID}"></span> ) Balance is  <span th:text = "${saldo}"></span> $</h1>
+	<table>
+		<thead>
+			<tr>
+				<th> Transfer ID </th>
+				<th> Amount </th>
+				<th> Addressee's bank account ID </th>
+				<th> Purpose </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="t : ${trasferimenti}">
+				<td th:text="${t.trasferimentoID}"></td>
+				<td th:text="${t.importo}"></td>
+				<td th:text="${t.DestContoId}"></td>
+				<td th:text="${t.causale}"></td>
+				<td th:text="${t.data}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+	<p> Complete the form in order to make a bank transfer</p>
+	<form action="#" th:action="@{/CreateTrasferimento}" method="POST">
+	<fieldset>
+				<p>
+					UserID of addressee: <input type="text" name="destUserID" required />
+				</p>
+				<p>
+					Bank account ID of addressee: <input type="text" name="destContoID" required />
+				</p>
+				<p>
+					Purpose: <input type="text" name="causale" required />
+				</p>
+				<p>
+					Amount: <input type="text" name="importo" required />
+				</p>
+				
+				<input type="submit" name="Make Trasferimento">
+			</fieldset>
+	</form>
+	</div>
+</body>
+</html>

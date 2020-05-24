@@ -74,6 +74,7 @@ public class TrasferimentoDao {
 				else {
 					while (result.next()) {
 						Trasferimento t = new Trasferimento();
+						t.setTrasferimentoID(result.getInt("trasferimentoID"));
 						t.setCausale(result.getString("causale"));
 						t.setContoID(contoID);
 						t.setData(result.getDate("data"));
