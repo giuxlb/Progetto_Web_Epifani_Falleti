@@ -8,7 +8,16 @@
 <div align="right">
 		<a th:href="@{/GoToHomePage}">Back to Home Page</a>
 	</div>
-	<p>Trasferimento andato a buon fine!</p>
+	<h1>Transfer gone well</h1>
+	<h2>Addressee info</h2>
+	<p> Bank account ID of addresse is <span th:text="${destContoID}"></span> </p>
+	<p> User ID of addresse is <span th:text="${destuserid}"></span> </p>
+	<p> Actual balance:  <span th:text="${saldoDest}"></span> $ </p>
+	<h2>Your info</h2>
+	<p> Bank account ID of addresse is <span th:text="${ContoID}"></span> </p>
+	<p> User ID of addresse is <span th:text="${userid}"></span> </p>
+	<p> Actual balance:  <span th:text="${saldo}"></span> $ </p>
+	
 	
 
 </body>
