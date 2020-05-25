@@ -27,7 +27,8 @@ public class TrasferimentoDao {
 		boolean verified1 = false;
 		boolean verified2 = false;
 		
-
+		if(conti == null) return 0;
+		
 		for (int i = 0; i < conti.size(); i++) {
 			if (conti.get(i).getID() == destContoID) // abbiamo trovato il conto
 			{

@@ -3,15 +3,17 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
 <body>
 	<div align="right">
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
-	<h1>Welcome to the Home Page</h1>
-	<p th:text = "${'Welcome '+ session.user.name+ ' '+ session.user.surname + '. Your userID is ' + session.user.id}"> </p>
+	<h1 th:text = "${'Welcome '+ session.user.name+ ' '+ session.user.surname}"></h1>
+	<h2 th:text = "${'Your userID is ' + session.user.id}"> </h2>
 	
-	<table>
+	<table align="center">
 	<thead>
 			<tr>
 				<th>Bank Account ID</th>

@@ -1,0 +1,22 @@
+@charset "ISO-8859-1";
+table, th, tr {
+  border: 1px solid black;
+  align: center;
+}
+
+h1, h2 {
+    text-align:center;
+}
+
+label {
+	width: 100px;
+	display: inline-block;
+}
+
+p#errorMsg {
+	color: red;
+}
+
+body {
+	background-color: lightgreen;
+}

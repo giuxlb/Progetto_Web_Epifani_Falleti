@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head >
 <meta charset="ISO-8859-1">
 <title>Login page</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}"/>
 </head>
 <body>
-	<h1>Welcome to the Epifani & Falleti project.</h1>
+	<h1 style="text-align: center" >Welcome to the Epifani & Falleti project.</h1>
 
 	<form action="CheckLogin" method="POST">
-		Username: <input type="text" name="username" required> <br>
-		Password: <input type="password" name="pwd" required><br>
+	<div>
+		<label>Username:</label><input id="userBox" type="text" name="username" required> <br>
+		<label>Password:</label><input id="passBox" type="password" name="pwd" required><br>
+	</div>
 		<input type="submit" value="login">
-		<p th:text=" ${errorMsg}"></p>
+		<p id="errorMsg" th:text=" ${errorMsg}"></p>
 	</form>
 
 </body>

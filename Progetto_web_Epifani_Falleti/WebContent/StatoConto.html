@@ -2,14 +2,16 @@
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Stato Conto</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../css/mystyle.css"  th:href="@{/css/mystyle.css}"/>
 </head>
 <body>
 	<div align="right">
 		<a th:href="@{/GoToHomePage}">Back to Home Page</a>
 	</div>
 	<h1 th:text="${'This is you bank account (ID: ' + session.ContoID + ')'+ 'Balance: ' + session.Saldo + '$'}"></h1>
-	<table>
+	<table align="center">
 		<thead>
 			<tr>
 				<th> Transfer ID </th>
@@ -34,21 +36,21 @@
 	<form action="#" th:action="@{/CreateTrasferimento}" method="POST">
 	<fieldset>
 				<p>
-					UserID of addressee: <input type="number" name="destUserID" required />
+					<label>UserID of addressee:</label> <input type="number" name="destUserID" required />
 				</p>
 				<p>
-					Bank account ID of addressee: <input type="number" name="destContoID" required />
+					<label>Bank account ID of addressee:</label> <input type="number" name="destContoID" required />
 				</p>
 				<p>
-					Purpose: <input type="text" name="causale" required />
+					<label>Purpose:</label> <input type="text" name="causale" required />
 				</p>
 				<p>
-					Amount: <input type="number" name="importo" required />
+					<label>Amount:</label> <input type="number" name="importo" required />
 				</p>
 				
 				<input type="submit" name="Make Trasferimento">
 			</fieldset>
-			<p th:text=" ${errorMsg}"></p>
+			<p id="errorMsg" th:text=" ${errorMsg}"></p>
 			
 	</form>
 	</div>
