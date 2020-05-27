@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import it.polimi.web.project.beans.Conto;
@@ -26,9 +27,10 @@ public class TrasferimentoDao {
 
 		boolean verified1 = false;
 		boolean verified2 = false;
-		
-		if(conti == null) return 0;
-		
+
+		if (conti == null)
+			return 0;
+
 		for (int i = 0; i < conti.size(); i++) {
 			if (conti.get(i).getID() == destContoID) // abbiamo trovato il conto
 			{
@@ -38,11 +40,13 @@ public class TrasferimentoDao {
 		} // qui ho controllato se il conto sotto quel contoID è effettivamente dello user
 			// id e se il saldo di quel conto, permette un trasferimento di quell'importo
 
-		if (!verified1) return 0;
-		
+		if (!verified1)
+			return 0;
+
 		Conto conto = cdao.findContoByContoID(contoID);
-		if (conto.getSaldo() < importo) return 1;
-		
+		if (conto.getSaldo() < importo)
+			return 1;
+
 		// se verified è ancora false, ritorniamo false
 
 		int importoDest = 0 - importo;
@@ -75,6 +79,26 @@ public class TrasferimentoDao {
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
+				if (!result.isBeforeFirst()) {
+
+				} else {
+					while (result.next()) {
+						Trasferimento t = new Trasferimento();
+						t.setTrasferimentoID(result.getInt("trasferimentoID"));
+						t.setCausale(result.getString("causale"));
+						t.setContoID(contoID);
+						t.setData(result.getDate("data"));
+						t.setImporto(result.getInt("importo"));
+						t.setDestContoId(result.getInt("DestContoID"));
+						trasferimenti.add(t);
+					}
+				}
+			}
+		}
+		query = "SELECT * FROM esercizio4.trasferimento where DestContoID = ?";
+		try (PreparedStatement pstatement = con.prepareStatement(query)) {
+			pstatement.setInt(1, contoID);
+			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
 					return null;
 				else {
@@ -91,6 +115,17 @@ public class TrasferimentoDao {
 				}
 			}
 		}
+
+		trasferimenti.sort(new Comparator<Trasferimento>() {
+			@Override
+			public int compare(Trasferimento t1, Trasferimento t2) {
+				if (t1.getData().compareTo(t2.getData()) == 0)
+					return 0;
+				else if (t1.getData().compareTo(t2.getData()) > 0)
+					return -1;
+				return 1;
+			}
+		});
 		return trasferimenti;
 	}
 
