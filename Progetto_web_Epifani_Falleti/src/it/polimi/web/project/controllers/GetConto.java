@@ -87,7 +87,7 @@ public class GetConto extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");
 			return;
 		}
-
+		session.setAttribute("trasf", trasferimenti);
 		String path = "/StatoConto.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());

@@ -2,6 +2,7 @@
 table, th, tr {
   border: 1px solid black;
   align: center;
+  background-color: lightblue;
 }
 
 h1, h2 {
@@ -19,4 +20,8 @@ p#errorMsg {
 
 body {
 	background-color: lightgreen;
+}
+
+p#info {
+	align:center;	
 }

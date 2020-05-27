@@ -26,7 +26,6 @@ public class TrasferimentoDao {
 		List<Conto> conti = cdao.findContoByUser(destUserID);
 
 		boolean verified1 = false;
-		boolean verified2 = false;
 
 		if (conti == null)
 			return 0;
@@ -75,13 +74,11 @@ public class TrasferimentoDao {
 
 	public List<Trasferimento> findTrasferimentibyConto(int contoID) throws SQLException {
 		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
-		String query = "SELECT * FROM esercizio4.trasferimento where contoID = ?";
+		String query = "SELECT * FROM esercizio4.trasferimento where ContoID = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
-				if (!result.isBeforeFirst()) {
-
-				} else {
+				if (result.isBeforeFirst()){
 					while (result.next()) {
 						Trasferimento t = new Trasferimento();
 						t.setTrasferimentoID(result.getInt("trasferimentoID"));
@@ -99,9 +96,7 @@ public class TrasferimentoDao {
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
-				if (!result.isBeforeFirst())
-					return null;
-				else {
+				if (result.isBeforeFirst()){
 					while (result.next()) {
 						Trasferimento t = new Trasferimento();
 						t.setTrasferimentoID(result.getInt("trasferimentoID"));
@@ -115,7 +110,6 @@ public class TrasferimentoDao {
 				}
 			}
 		}
-
 		trasferimenti.sort(new Comparator<Trasferimento>() {
 			@Override
 			public int compare(Trasferimento t1, Trasferimento t2) {

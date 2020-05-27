@@ -18,8 +18,10 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import java.util.List;
+
 import it.polimi.web.project.DAO.TrasferimentoDao;
-import it.polimi.web.project.beans.User;
+import it.polimi.web.project.beans.*;
 import it.polimi.web.project.utils.ConnectionHandler;
 
 /**
@@ -102,6 +104,8 @@ public class CreateTrasferimento extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		String path;
+		List<Trasferimento> t = (List<Trasferimento>) session.getAttribute("trasf");
+		ctx.setVariable("trasferimenti", t);
 		switch (trasferimentoValue) {
 
 		case (0):
