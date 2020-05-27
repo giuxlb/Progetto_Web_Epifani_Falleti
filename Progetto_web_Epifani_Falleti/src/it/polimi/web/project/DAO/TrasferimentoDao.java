@@ -119,9 +119,9 @@ public class TrasferimentoDao {
 		trasferimenti.sort(new Comparator<Trasferimento>() {
 			@Override
 			public int compare(Trasferimento t1, Trasferimento t2) {
-				if (t1.getData().compareTo(t2.getData()) == 0)
-					return 0;
-				else if (t1.getData().compareTo(t2.getData()) > 0)
+				if (t1.getData().compareTo(t2.getData()) == 0) {
+					return t2.getTrasferimentoID() - t1.getTrasferimentoID();
+				} else if (t1.getData().compareTo(t2.getData()) > 0)
 					return -1;
 				return 1;
 			}
