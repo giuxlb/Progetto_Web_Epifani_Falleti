@@ -59,7 +59,7 @@ public class CreateTrasferimento extends HttpServlet {
 		// Redirect the user to home if not logged in
 		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
-			String loginpath = getServletContext().getContextPath() + "/index.html";
+			String loginpath = getServletContext().getContextPath() + "/GoToIndex";
 			response.sendRedirect(loginpath);
 			return;
 		}

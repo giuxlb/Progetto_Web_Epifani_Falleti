@@ -56,7 +56,7 @@ public class GoToConfermaTrasferimento extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String indexPath = getServletContext().getContextPath() + "/index.html";
+		String indexPath = getServletContext().getContextPath() + "/GoToIndex";
 		HttpSession session = request.getSession();
 		if (session.getAttribute("user") == null || session.isNew()) {
 			response.sendRedirect(indexPath);
