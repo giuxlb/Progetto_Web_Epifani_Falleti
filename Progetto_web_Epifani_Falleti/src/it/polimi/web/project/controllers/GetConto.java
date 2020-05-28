@@ -19,8 +19,11 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.web.project.DAO.ContoDao;
 import it.polimi.web.project.DAO.TrasferimentoDao;
+import it.polimi.web.project.beans.Conto;
 import it.polimi.web.project.beans.Trasferimento;
+import it.polimi.web.project.beans.User;
 import it.polimi.web.project.utils.ConnectionHandler;
 
 /**
@@ -60,6 +63,7 @@ public class GetConto extends HttpServlet {
 		// TODO Auto-generated method stub
 		String indexPath = getServletContext().getContextPath() + "/GoToIndex";
 		HttpSession session = request.getSession();
+
 		if (session.getAttribute("user") == null || session.isNew()) {
 			response.sendRedirect(indexPath);
 		}
@@ -74,6 +78,29 @@ public class GetConto extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
 			return;
 		}
+		ContoDao cdao = new ContoDao(connection);
+		User u = (User) session.getAttribute("user");
+		List<Conto> conti = new ArrayList<Conto>();
+		try {
+			conti = cdao.findContoByUser(u.getId());
+		} catch (SQLException e) {
+			// for debugging only e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
+			return;
+		}
+		boolean ok = false;
+		for (int i = 0; i < conti.size(); i++) {
+			if (conti.get(i).getID() == contoID) {
+				ok = true;
+				saldo = conti.get(i).getSaldo();
+				break;
+			}
+
+		}
+		if (!ok) {
+			response.sendRedirect(indexPath);
+		}
+
 		session.setAttribute("ContoID", contoID);
 		session.setAttribute("Saldo", saldo);
 
