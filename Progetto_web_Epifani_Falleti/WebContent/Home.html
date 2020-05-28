@@ -25,7 +25,7 @@
 			<tr th:each="c : ${conti}">
 				<td th:text="${c.id}"></td>
 				<td th:text="${ c.saldo}"></td>
-				<td><a th:href="@{/GetConto(contoid=${c.id},saldo = ${c.saldo})}">Bank Account Status</a></td>
+				<td><a th:href="@{/GetConto(contoid=${c.id})}">Bank Account Status</a></td>
 			</tr>
 		</tbody>
 	</table>

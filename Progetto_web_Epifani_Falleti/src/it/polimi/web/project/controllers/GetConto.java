@@ -72,7 +72,6 @@ public class GetConto extends HttpServlet {
 		Integer saldo = null;
 		try {
 			contoID = Integer.parseInt(request.getParameter("contoid"));
-			saldo = Integer.parseInt(request.getParameter("saldo"));
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
