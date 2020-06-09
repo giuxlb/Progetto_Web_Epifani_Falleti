@@ -52,8 +52,7 @@ public class TrasferimentoDao {
 		// qui verified sarà true, quindi possiamo modificare sia l'importo del conto di
 		// destinazione, sia quello di quello di origine origine e aggiungere il
 		// trasferimento al dbms
-		cdao.changeSaldo(importo, destContoID);
-		cdao.changeSaldo(importoDest, contoID);
+		
 
 		java.util.Date d = new java.util.Date();
 
@@ -67,6 +66,9 @@ public class TrasferimentoDao {
 			statement.execute();
 
 		}
+		
+		cdao.changeSaldo(importo, destContoID);
+		cdao.changeSaldo(importoDest, contoID);
 
 		// TO-DO ricordare a peppe l'aggiunta del parametro session.contoID
 		return 2;
