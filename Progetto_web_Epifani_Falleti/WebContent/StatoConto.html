@@ -10,9 +10,9 @@
 	<div align="right">
 		<a th:href="@{/GoToHomePage}">Back to Home Page</a>
 	</div>
-	<h1 th:text="${'This is you bank account (ID: ' + session.ContoID + ')'+ 'Balance: ' + session.Saldo + '$'}"></h1>
-	<p id="info">Trasferimenti</p>
-	<div th:if="!${#lists.isEmpty(trasferimenti)}">
+	<h1 th:text="${'This is you bank account (ID: ' + session.bankAccountID + ')'+ 'Balance: ' + session.balance + '$'}"></h1>
+	<p id="info">Transfers</p>
+	<div th:if="!${#lists.isEmpty(transfers)}">
 	<table align="center">
 		<thead>
 			<tr>
@@ -25,39 +25,39 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="t : ${trasferimenti}">
-				<td th:text="${t.trasferimentoID}"></td>
-				<td th:text="${t.importo}"></td>
-				<td th:text="${t.DestContoId}"></td>
-				<td th:text="${t.causale}"></td>
+			<tr th:each="t : ${transfers}">
+				<td th:text="${t.transferID}"></td>
+				<td th:text="${t.amount}"></td>
+				<td th:text="${t.destBankAccountId}"></td>
+				<td th:text="${t.causal}"></td>
 				<td th:text="${t.data}"></td>
-				<td th:text="${t.DestContoID == session.ContoID ? 'INGRESSO' : 'USCITA'}"></td>
+				<td th:text="${t.destBankAccountID == session.bankAccountID ? 'INGRESSO' : 'USCITA'}"></td>
 				
 			</tr>
 		</tbody>
 	</table>
 	</div>
-	<div th:if="${#lists.isEmpty(trasferimenti)}">
-		<p id="info">Non hai nessun trasferimento</p>
+	<div th:if="${#lists.isEmpty(transfers)}">
+		<p id="info">There are no transfers yet.</p>
 	</div>
 	<div>
 	<p> Complete the form in order to make a bank transfer</p>
-	<form action="#" th:action="@{/CreateTrasferimento}" method="POST">
+	<form action="#" th:action="@{/CreateTransfer}" method="POST">
 	<fieldset>
 				<p>
 					<label>UserID of addressee:</label> <input type="number" name="destUserID" required />
 				</p>
 				<p>
-					<label>Bank account ID of addressee:</label> <input type="number" name="destContoID" required />
+					<label>Bank account ID of addressee:</label> <input type="number" name="destBankAccountID" required />
 				</p>
 				<p>
-					<label>Purpose:</label> <input type="text" name="causale" required />
+					<label>Purpose:</label> <input type="text" name="causal" required />
 				</p>
 				<p>
-					<label>Amount:</label> <input type="number" name="importo" required />
+					<label>Amount:</label> <input type="number" name="amount" required />
 				</p>
 				
-				<input type="submit" name="Make Trasferimento">
+				<input type="submit" name="Make Transfer">
 			</fieldset>
 			<p id="errorMsg" th:text=" ${errorMsg}"></p>
 			

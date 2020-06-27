@@ -17,15 +17,15 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.web.project.DAO.ContoDao;
-import it.polimi.web.project.beans.Conto;
+import it.polimi.web.project.DAO.BankAccountDao;
+import it.polimi.web.project.beans.BankAccount;
 import it.polimi.web.project.utils.ConnectionHandler;
 
 /**
  * Servlet implementation class GoToConfermaTrasferimento
  */
-@WebServlet("/GoToConfermaTrasferimento")
-public class GoToConfermaTrasferimento extends HttpServlet {
+@WebServlet("/GoToTransferConfirm")
+public class GoToTransferConfirm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private TemplateEngine templateEngine;
@@ -33,7 +33,7 @@ public class GoToConfermaTrasferimento extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GoToConfermaTrasferimento() {
+	public GoToTransferConfirm() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -62,13 +62,13 @@ public class GoToConfermaTrasferimento extends HttpServlet {
 			response.sendRedirect(indexPath);
 		}
 
-		Integer destcontoid = (Integer) session.getAttribute("destContoID");
-		Integer contoid = (Integer) session.getAttribute("ContoID");
+		Integer destBankAccountID = (Integer) session.getAttribute("destBankAccountID");
+		Integer bankAccountID = (Integer) session.getAttribute("bankAccountID");
 
-		ContoDao cdao = new ContoDao(connection);
-		Conto conto = new Conto();
+		BankAccountDao cdao = new BankAccountDao(connection);
+		BankAccount bankAccount = new BankAccount();
 		try {
-			conto = cdao.findContoByContoID(destcontoid);
+			bankAccount = cdao.findBankAccountByID(destBankAccountID);
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");
@@ -78,21 +78,21 @@ public class GoToConfermaTrasferimento extends HttpServlet {
 		String path = "/ConfermaTrasferimento.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("saldoDest", conto.getSaldo());
-		ctx.setVariable("destContoID", conto.getID());
-		ctx.setVariable("destuserid", conto.getUserID());
+		ctx.setVariable("balanceDest", bankAccount.getBalance());
+		ctx.setVariable("destBankAccountID", bankAccount.getID());
+		ctx.setVariable("destuserid", bankAccount.getUserID());
 
 		try {
-			conto = cdao.findContoByContoID(contoid);
+			bankAccount = cdao.findBankAccountByID(bankAccountID);
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");
 			return;
 		}
 
-		ctx.setVariable("saldo", conto.getSaldo());
-		ctx.setVariable("ContoID", conto.getID());
-		ctx.setVariable("userid", conto.getUserID());
+		ctx.setVariable("balance", bankAccount.getBalance());
+		ctx.setVariable("bankAccountID", bankAccount.getID());
+		ctx.setVariable("userid", bankAccount.getUserID());
 
 		templateEngine.process(path, ctx, response.getWriter());
 

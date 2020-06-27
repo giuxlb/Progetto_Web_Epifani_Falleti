@@ -1,9 +1,9 @@
 package it.polimi.web.project.beans;
 
-public class Conto {
+public class BankAccount {
 
 	private int id;
-	private int saldo;
+	private int balance;
 	private int userID;
 
 	public int getID() {
@@ -14,12 +14,12 @@ public class Conto {
 		this.id = id;
 	}
 
-	public int getSaldo() {
-		return this.saldo;
+	public int getBalance() {
+		return this.balance;
 	}
 
-	public void setSaldo(int saldo) {
-		this.saldo = saldo;
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
 
 	public int getUserID() {

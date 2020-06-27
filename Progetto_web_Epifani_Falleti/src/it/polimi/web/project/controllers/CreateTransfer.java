@@ -20,15 +20,15 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.util.List;
 
-import it.polimi.web.project.DAO.TrasferimentoDao;
+import it.polimi.web.project.DAO.TransferDao;
 import it.polimi.web.project.beans.*;
 import it.polimi.web.project.utils.ConnectionHandler;
 
 /**
  * Servlet implementation class CreateTrasferimento
  */
-@WebServlet("/CreateTrasferimento")
-public class CreateTrasferimento extends HttpServlet {
+@WebServlet("/CreateTransfer")
+public class CreateTransfer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private Connection connection = null;
@@ -37,7 +37,7 @@ public class CreateTrasferimento extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CreateTrasferimento() {
+	public CreateTransfer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -67,16 +67,16 @@ public class CreateTrasferimento extends HttpServlet {
 		}
 
 		boolean isRequestBad = false;
-		Integer DestUserID = null;
-		Integer DestContoID = null;
+		Integer destUserID = null;
+		Integer destBankAccountID = null;
 		Integer amount = null;
-		String causale = null;
+		String causal = null;
 		try {
-			DestUserID = Integer.parseInt(request.getParameter("destUserID"));
-			DestContoID = Integer.parseInt(request.getParameter("destContoID"));
-			amount = Integer.parseInt(request.getParameter("importo"));
-			causale = StringEscapeUtils.escapeJava(request.getParameter("causale"));
-			isRequestBad = causale.isEmpty() || DestUserID < 0 || DestContoID < 0 || amount < 0;
+			destUserID = Integer.parseInt(request.getParameter("destUserID"));
+			destBankAccountID = Integer.parseInt(request.getParameter("destBankAccountID"));
+			amount = Integer.parseInt(request.getParameter("amount"));
+			causal = StringEscapeUtils.escapeJava(request.getParameter("causal"));
+			isRequestBad = causal.isEmpty() || destUserID < 0 || destBankAccountID < 0 || amount < 0;
 		} catch (NumberFormatException | NullPointerException e) {
 			isRequestBad = true;
 			e.printStackTrace();
@@ -87,15 +87,14 @@ public class CreateTrasferimento extends HttpServlet {
 		}
 
 		User user = (User) session.getAttribute("user");
-		TrasferimentoDao trasferimentoDao = new TrasferimentoDao(connection);
-		Integer UserID = user.getId();
-		Integer ContoID = (Integer) session.getAttribute("ContoID");
+		TransferDao transferDao = new TransferDao(connection);
+		Integer userID = user.getId();
+		Integer bankAccountID = (Integer) session.getAttribute("bankAccountID");
 		// Date data = System.currentTimeMillis();
-		System.out.println("Sono qui");
-		int trasferimentoValue = -1;
+		int transferValue = -1;
 		try {
-			trasferimentoValue = trasferimentoDao.createTrasferimento(DestUserID, DestContoID, UserID, ContoID, amount,
-					causale);
+			transferValue = transferDao.createTransfer(destUserID, destBankAccountID, userID, bankAccountID, amount,
+					causal);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
@@ -104,9 +103,9 @@ public class CreateTrasferimento extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		String path;
-		List<Trasferimento> t = (List<Trasferimento>) session.getAttribute("trasf");
-		ctx.setVariable("trasferimenti", t);
-		switch (trasferimentoValue) {
+		List<Transfer> t = (List<Transfer>) session.getAttribute("transfers");
+		ctx.setVariable("transfers", t);
+		switch (transferValue) {
 
 		case (0):
 			ctx.setVariable("errorMsg", "The User ID you entered doesn't own that bank account");
@@ -119,8 +118,8 @@ public class CreateTrasferimento extends HttpServlet {
 			templateEngine.process(path, ctx, response.getWriter());
 			break;
 		case (2):
-			path = getServletContext().getContextPath() + "/GoToConfermaTrasferimento";
-			session.setAttribute("destContoID", DestContoID);
+			path = getServletContext().getContextPath() + "/GoToTransferConfirm";
+			session.setAttribute("destBankAccountID", destBankAccountID);
 			response.sendRedirect(path);
 		}
 

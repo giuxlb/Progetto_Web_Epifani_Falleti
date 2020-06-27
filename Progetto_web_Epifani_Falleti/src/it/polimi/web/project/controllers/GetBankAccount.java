@@ -19,18 +19,18 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.web.project.DAO.ContoDao;
-import it.polimi.web.project.DAO.TrasferimentoDao;
-import it.polimi.web.project.beans.Conto;
-import it.polimi.web.project.beans.Trasferimento;
+import it.polimi.web.project.DAO.BankAccountDao;
+import it.polimi.web.project.DAO.TransferDao;
+import it.polimi.web.project.beans.BankAccount;
+import it.polimi.web.project.beans.Transfer;
 import it.polimi.web.project.beans.User;
 import it.polimi.web.project.utils.ConnectionHandler;
 
 /**
  * Servlet implementation class GetConto
  */
-@WebServlet("/GetConto")
-public class GetConto extends HttpServlet {
+@WebServlet("/GetBankAccount")
+public class GetBankAccount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private TemplateEngine templateEngine;
@@ -38,7 +38,7 @@ public class GetConto extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetConto() {
+	public GetBankAccount() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -68,30 +68,30 @@ public class GetConto extends HttpServlet {
 			response.sendRedirect(indexPath);
 		}
 
-		Integer contoID = null;
-		Integer saldo = null;
+		Integer bankAccountID = null;
+		Integer balance = null;
 		try {
-			contoID = Integer.parseInt(request.getParameter("contoid"));
+			bankAccountID = Integer.parseInt(request.getParameter("bankAccountID"));
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
 			return;
 		}
-		ContoDao cdao = new ContoDao(connection);
+		BankAccountDao cdao = new BankAccountDao(connection);
 		User u = (User) session.getAttribute("user");
-		List<Conto> conti = new ArrayList<Conto>();
+		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 		try {
-			conti = cdao.findContoByUser(u.getId());
+			bankAccounts = cdao.findBankAccountsByUser(u.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
 			return;
 		}
 		boolean ok = false;
-		for (int i = 0; i < conti.size(); i++) {
-			if (conti.get(i).getID() == contoID) {
+		for (int i = 0; i < bankAccounts.size(); i++) {
+			if (bankAccounts.get(i).getID() == bankAccountID) {
 				ok = true;
-				saldo = conti.get(i).getSaldo();
+				balance = bankAccounts.get(i).getBalance();
 				break;
 			}
 
@@ -100,28 +100,28 @@ public class GetConto extends HttpServlet {
 			response.sendRedirect(indexPath);
 		}
 
-		session.setAttribute("ContoID", contoID);
-		session.setAttribute("Saldo", saldo);
+		session.setAttribute("bankAccountID", bankAccountID);
+		session.setAttribute("balance", balance);
 
-		TrasferimentoDao tDao = new TrasferimentoDao(connection);
+		TransferDao tDao = new TransferDao(connection);
 
-		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
+		List<Transfer> transfers = new ArrayList<Transfer>();
 		try {
-			trasferimenti = tDao.findTrasferimentibyConto(contoID);
+			transfers = tDao.findTransfersByBankAccount(bankAccountID);
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");
 			return;
 		}
-		session.setAttribute("trasf", trasferimenti);
+		System.out.println(transfers.size());
+		session.setAttribute("transfers", transfers);
 		String path = "/StatoConto.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("trasferimenti", trasferimenti);
-		ctx.setVariable("saldo", saldo);
-		ctx.setVariable("contoID", contoID);
+		ctx.setVariable("transfers", transfers);
+		ctx.setVariable("balance", balance);
+		ctx.setVariable("bankAccountID", bankAccountID);
 		templateEngine.process(path, ctx, response.getWriter());
-
 	}
 
 	/**

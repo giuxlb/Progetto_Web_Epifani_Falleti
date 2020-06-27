@@ -19,8 +19,8 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import it.polimi.web.project.DAO.ContoDao;
-import it.polimi.web.project.beans.Conto;
+import it.polimi.web.project.DAO.BankAccountDao;
+import it.polimi.web.project.beans.BankAccount;
 import it.polimi.web.project.beans.User;
 import it.polimi.web.project.utils.ConnectionHandler;
 
@@ -64,10 +64,10 @@ public class GoToHomePage extends HttpServlet {
 			response.sendRedirect(indexPath);
 		}
 		User user = (User) session.getAttribute("user");
-		ContoDao contodao = new ContoDao(connection);
-		List<Conto> conti = new ArrayList<Conto>();
+		BankAccountDao bankAccountDao = new BankAccountDao(connection);
+		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 		try {
-			conti = contodao.findContoByUser(user.getId());
+			bankAccounts = bankAccountDao.findBankAccountsByUser(user.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover missions");
@@ -77,7 +77,7 @@ public class GoToHomePage extends HttpServlet {
 		String path = "/Home.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("conti", conti);
+		ctx.setVariable("bankAccounts", bankAccounts);
 		templateEngine.process(path, ctx, response.getWriter());
 
 	}

@@ -22,10 +22,10 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="c : ${conti}">
+			<tr th:each="c : ${bankAccounts}">
 				<td th:text="${c.id}"></td>
-				<td th:text="${ c.saldo}"></td>
-				<td><a th:href="@{/GetConto(contoid=${c.id})}">Bank Account Status</a></td>
+				<td th:text="${ c.balance}"></td>
+				<td><a th:href="@{/GetBankAccount(bankAccountID=${c.id})}">Bank Account Status</a></td>
 			</tr>
 		</tbody>
 	</table>
