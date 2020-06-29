@@ -3,6 +3,7 @@ package it.polimi.web.project.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -18,10 +19,9 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import java.util.List;
-
 import it.polimi.web.project.DAO.TransferDao;
-import it.polimi.web.project.beans.*;
+import it.polimi.web.project.beans.Transfer;
+import it.polimi.web.project.beans.User;
 import it.polimi.web.project.utils.ConnectionHandler;
 
 /**
@@ -66,30 +66,38 @@ public class CreateTransfer extends HttpServlet {
 			return;
 		}
 
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		String path;
+		List<Transfer> t = (List<Transfer>) session.getAttribute("transfers");
+		ctx.setVariable("transfers", t);
 		boolean isRequestBad = false;
 		Integer destUserID = null;
 		Integer destBankAccountID = null;
 		Integer amount = null;
 		String causal = null;
+		User user = (User) session.getAttribute("user");
+		TransferDao transferDao = new TransferDao(connection);
+		Integer userID = user.getId();
+		Integer bankAccountID = (Integer) session.getAttribute("bankAccountID");
 		try {
 			destUserID = Integer.parseInt(request.getParameter("destUserID"));
 			destBankAccountID = Integer.parseInt(request.getParameter("destBankAccountID"));
 			amount = Integer.parseInt(request.getParameter("amount"));
 			causal = StringEscapeUtils.escapeJava(request.getParameter("causal"));
-			isRequestBad = causal.isEmpty() || destUserID < 0 || destBankAccountID < 0 || amount < 0;
+			isRequestBad = causal.isEmpty() || destUserID < 0 || destBankAccountID < 0 || amount <= 0
+					|| bankAccountID == destBankAccountID;
 		} catch (NumberFormatException | NullPointerException e) {
 			isRequestBad = true;
 			e.printStackTrace();
 		}
 		if (isRequestBad) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+			ctx.setVariable("errorMsg", "The request is bad");
+			path = "/StatoConto.html";
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
 		}
 
-		User user = (User) session.getAttribute("user");
-		TransferDao transferDao = new TransferDao(connection);
-		Integer userID = user.getId();
-		Integer bankAccountID = (Integer) session.getAttribute("bankAccountID");
 		// Date data = System.currentTimeMillis();
 		int transferValue = -1;
 		try {
@@ -100,11 +108,6 @@ public class CreateTransfer extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
 		}
 
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		String path;
-		List<Transfer> t = (List<Transfer>) session.getAttribute("transfers");
-		ctx.setVariable("transfers", t);
 		switch (transferValue) {
 
 		case (0):
